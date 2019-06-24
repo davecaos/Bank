@@ -6,7 +6,7 @@ services:
       context: "."
       dockerfile: "Dockerfile"
     ports:
-      - 8080:8080
+      - 1337:1337
       - 8443:8443
     volumes:
       - .:/opt/app

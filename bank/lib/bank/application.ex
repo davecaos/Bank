@@ -13,10 +13,10 @@ defmodule Bank.Application do
     ]
 
     children = [
-      
+
       {Bank.API, [cleartext_options]},
       {Bank.API, [secure_options]},
-      
+
     ]
 
     opts = [strategy: :one_for_one, name: Bank.Supervisor]
@@ -27,7 +27,7 @@ defmodule Bank.Application do
     with raw when is_binary(raw) <- System.get_env("PORT"), {port, ""} = Integer.parse(raw) do
       port
     else
-      _ -> 8080
+      _ -> 1337
     end
   end
 
