@@ -1,34 +1,42 @@
 defmodule Bank.STORAGE.Users do
 
+  @bucket :users
+
   def init() do
-
-    :ets.new(:users, [:set, :public, :named_table])
+    :ets.new(@bucket, [:set, :public, :named_table])
+    autoincrement_index = 0
+    :ets.insert(:users, {:autoincrement_index, autoincrement_index})
   end
 
-  def new( user) do
+  def new(user) do
 
-    new_acount = 1
-    :ets.insert(:users, {{:users, user},{:acounts, acount}})
-
+    new_acount = autoicrement_index()
+    new_user = {{:users, user},{:acount, new_acount}}
+    :ets.insert(@bucket, new_user)
+    new_user
   end
 
-  def acount( user) do
+  def acount(user) do
 
-    available_money = acount( user)
-    if available_money >= amount then do
-      new_amount = available_money - amount
+    lookup = :ets.lookup(@bucket, user)
+    case lookup do
+      [] ->
+        {:error, :user_not_found}
 
-      :ets.lookup(:acounts, {user, new_amount })
+      [{{:users, user},{:acount, acount}}] ->
+        {:ok, {:acount, acount}}
+    end
 
-      {:ok, new_amount}
-    else
 
-      {:ok, new_amount}
-  end
 
 end
 
+def autoincrement_index() do
+  [{:autoincrement_index, current_index}] = :ets.lookup(@bucket, :autoincrement_index)
+  :ets.insert(@bucket, {:autoincrement_index, current_index + 1})
 
+  current_index
+end
 
 
 end

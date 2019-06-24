@@ -11,10 +11,11 @@ defmodule Bank.API.Router do
     )
   end
 
-  # Call GreetUser and in WWW dir AND call into lib
   section [{Raxx.Logger, Raxx.Logger.setup(level: :info)}], [
-    {%{path: ["acounts"]}, Actions.WelcomeMessage},
-    {%{path: ["users"]}, Actions.Users},
+    {%{path: ["acounts","withdraw"]}, Actions.WelcomeMessage},
+    {%{path: ["acounts","deposit"]}, Actions.WelcomeMessage},
+    {%{path: ["users", "login"]}, Actions.Users},
+    {%{path: ["users", "register"]}, Actions.Users},
   ]
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :debug)}], [
