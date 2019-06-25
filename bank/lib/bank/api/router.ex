@@ -15,7 +15,7 @@ defmodule Bank.API.Router do
     {%{path: ["acounts","withdraw"]}, Actions.WelcomeMessage},
     {%{path: ["acounts","deposit"]}, Actions.WelcomeMessage},
     {%{path: ["users", "login"]}, Actions.Users},
-    {%{path: ["users", "register"]}, Actions.Users},
+    {%{path: ["users", "singup"]}, Actions.Users},
   ]
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :debug)}], [

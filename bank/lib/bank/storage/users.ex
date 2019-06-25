@@ -1,6 +1,7 @@
 defmodule Bank.STORAGE.Users do
 
   @bucket :users
+  alias Bank.STORAGE.Acounts
 
   def init() do
     :ets.new(@bucket, [:set, :public, :named_table])
@@ -10,18 +11,18 @@ defmodule Bank.STORAGE.Users do
 
   def new(user) do
 
-    new_acount = autoicrement_index()
+    new_acount = Acounts.new()
     new_user = {{:users, user},{:acount, new_acount}}
     :ets.insert(@bucket, new_user)
     new_user
   end
 
-  def acount(user) do
+  def query_acount_by(user) do
 
     lookup = :ets.lookup(@bucket, user)
     case lookup do
       [] ->
-        {:error, :user_not_found}
+        {:error, :not_found}
 
       [{{:users, user},{:acount, acount}}] ->
         {:ok, {:acount, acount}}
@@ -29,14 +30,7 @@ defmodule Bank.STORAGE.Users do
 
 
 
-end
-
-def autoincrement_index() do
-  [{:autoincrement_index, current_index}] = :ets.lookup(@bucket, :autoincrement_index)
-  :ets.insert(@bucket, {:autoincrement_index, current_index + 1})
-
-  current_index
-end
+  end
 
 
 end
