@@ -1,16 +1,20 @@
 defmodule Bank.STORAGE.Acounts do
 
+  # The module name represent the main entity to be pesisted and also the primary key.
+  # The Acount "has" funds
+
   @bucket :acounts
 
   def init() do
     :ets.new(@bucket, [:set, :public, :named_table])
+    autoincrement_index = 1
+    :ets.insert(@bucket, {:autoincrement_index, autoincrement_index})
   end
 
   def new() do
-
     {:ok, acount_number} = autoincrement_index()
     new_acount = {{:acount, acount_number},{:amount, 0}}
-    :ets.insert(@bucket,new_acount)
+    :ets.insert(@bucket, new_acount)
     {:acount, acount_number}
   end
 
@@ -20,7 +24,7 @@ defmodule Bank.STORAGE.Acounts do
       [] ->
         {:error, :not_found}
 
-      [{{:acount, acount}, {:amount, amount }}] ->
+      [{{:acount, ^acount}, {:amount, amount }}] ->
         {:ok, {:amount, amount}}
     end
 
@@ -33,7 +37,7 @@ defmodule Bank.STORAGE.Acounts do
       :ets.insert(@bucket, {{:acount, acount}, {:amount, new_amount }})
       {:ok, new_amount}
     else
-      {:error, {:no_enough_funds_for_withdraw, available_funds}}
+      {:error, {:not_enough_funds_for_withdraw, available_funds}}
   end
 end
 
@@ -44,6 +48,11 @@ end
     {:ok, new_amount}
 
   end
+
+  def exist?(acount) do
+    {:error, :not_found} != query_funds_by(acount)
+  end
+
 
   def autoincrement_index() do
     [{:autoincrement_index, current_index}] = :ets.lookup(@bucket, :autoincrement_index)
