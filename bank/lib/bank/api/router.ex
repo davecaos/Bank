@@ -12,10 +12,10 @@ defmodule Bank.API.Router do
   end
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :info)}], [
-    {%{path: ["acounts","withdraw"]}, Actions.WelcomeMessage},
-    {%{path: ["acounts","deposit"]}, Actions.WelcomeMessage},
+    {%{path: ["transactions"]}, Controller.Transactions },
     {%{path: ["users", "auth"]}, Actions.Users},
     {%{path: ["users", "singup"]}, Actions.Users},
+    {%{path: ["status"]}, Actions.Status},
   ]
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :debug)}], [

@@ -1,8 +1,8 @@
-defmodule Bank.STORAGE.UsersTest do
+defmodule Bank.Storage.UsersTest do
   use ExUnit.Case
   doctest Bank
 
-  alias Bank.STORAGE.Users
+  alias Bank.Storage.Users
   setup %{} do
     true = Users.init()
     :ok
@@ -10,7 +10,6 @@ defmodule Bank.STORAGE.UsersTest do
 
   test "Add User" do
     new_user = "Gatinho"
-    assert  {{:users, new_user}, {:acount, _}} = Users.new(new_user)
-
+    assert  {{:user, new_user}, {:acounts, []}} == Users.new(new_user)
   end
 end

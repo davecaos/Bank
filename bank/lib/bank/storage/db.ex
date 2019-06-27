@@ -1,21 +1,20 @@
-defmodule Bank.STORAGE.DB do
+defmodule Bank.Storage.DB do
   use Agent
 
-  alias Bank.STORAGE.Acounts
-  alias Bank.STORAGE.Users
-   
-  # Elixir doesn't have primitives like locks or mutexs as synchronization mechanism by desing,
+  alias Bank.Storage.Acounts
+  alias Bank.Storage.Users
+
+    # Elixir doesn't have primitives like locks or mutexs as synchronization mechanism by desing,
   # Due to we have to handle that with a more higher abstraction.
-  # 
+  #
   # Processes in Elixir is single threaded, I will use an Agent.
   # https://elixir-lang.org/getting-started/mix-otp/agent.html#the-trouble-with-state
   # Every request will be served one per time, and rest will be enqueue on the Agent's process queue
   # with this we create a Critical section and we emulate the ACI of ACID (Atomicity, Consistency, Isolation, Durability)
   # that are necessary properties of a transacional database.
   #
-  # They way that a process behavies in Elixir is similar to Active Object pattern 
-  # https://en.wikipedia.org/wiki/Active_object  
-
+  # They way that a process behavies in Elixir is similar to Active Object pattern
+  # https://en.wikipedia.org/wiki/Active_object
 
 
   def start_link(initial_value) do
@@ -23,37 +22,41 @@ defmodule Bank.STORAGE.DB do
   end
 
   def new_user(user) do
-    Agent.get(__MODULE__, fn -> Users.new(user) end)
+    critical_section(fn -> Users.new(user) end)
   end
 
   def user_exist?(user) do
-    Agent.get(__MODULE__, fn -> Users.exist?(user) end)
+    critical_section(fn -> Users.exist?(user) end)
   end
 
   def add_acount_to(user) do
-    Agent.get(__MODULE__, fn -> Users.add_acount_to(user, Acounts.new()) end)
+    critical_section(fn -> Users.add_acount_to(user, Acounts.new()) end)
   end
 
   def acount_exist?(acount) do
-    Agent.get(__MODULE__, fn -> Acount.exist?(acount) end)
+    critical_section(fn -> Acounts.exist?(acount) end)
   end
 
   def query_acounts_by(user) do
-    Agent.get(__MODULE__, fn -> Users.query_acounts_by(user) end)
-  end
-
-  def query_funds_by(acount) do
-    Agent.get(__MODULE__, fn -> Acount.query_funds_by(acount) end)
+    critical_section(fn -> Users.query_acounts_by(user) end)
   end
 
   def withdraw(acount, amount) do
-    Agent.get(__MODULE__, fn -> Acount.withdraw( acount, amount) end)
+    critical_section(fn -> Acounts.withdraw( acount, amount) end)
   end
 
   def deposit(acount, amount) do
-    Agent.get(__MODULE__, fn ->  Acount.deposit(acount, amount) end)
+    critical_section(fn ->  Acounts.deposit(acount, amount) end)
   end
 
+  def balance(acount) do
+    critical_section(fn ->  Acounts.query_funds_by(acount) end)
+  end
+
+
+  defp critical_section(lambda) do
+    Agent.get(__MODULE__, lambda)
+  end
 
   def init() do
     Users.init()

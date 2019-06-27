@@ -1,16 +1,16 @@
-defmodule Bank.STORAGE.Users do
+defmodule Bank.Storage.Users do
   @bucket :users
 
   # The module name represent the main entity to be pesisted and also the primary key.
   # An User "has" acount(s)
 
   def init() do
-    :ets.new(@bucket, [:set, :public, :named_table])
+    @bucket == :ets.new(@bucket, [:set, :public, :named_table])
   end
 
   def new(user) do
     acounts = []
-    new_user = {{:users, user},{:acounts, acounts}}
+    new_user = {{:user, user},{:acounts, acounts}}
     case :ets.insert_new(@bucket, new_user) do
       true  -> new_user
       false -> {:error, :already_exists}
@@ -33,7 +33,7 @@ defmodule Bank.STORAGE.Users do
       [] ->
         {:error, :not_found}
 
-      [{{:users, ^user},{:acounts, acounts}}] ->
+      [{{:user, ^user},{:acounts, acounts}}] ->
         {:ok, {:acounts, acounts}}
     end
   end

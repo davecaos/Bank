@@ -1,4 +1,4 @@
-defmodule Bank.STORAGE.Acounts do
+defmodule Bank.Storage.Acounts do
 
   # The module name represent the main entity to be pesisted and also the primary key.
   # The Acount "has" funds
@@ -6,9 +6,10 @@ defmodule Bank.STORAGE.Acounts do
   @bucket :acounts
 
   def init() do
-    :ets.new(@bucket, [:set, :public, :named_table])
     autoincrement_index = 1
+    @bucket == :ets.new(@bucket, [:set, :public, :named_table])
     :ets.insert(@bucket, {:autoincrement_index, autoincrement_index})
+    true
   end
 
   def new() do
