@@ -4,6 +4,19 @@ defmodule Bank.Storage.DB do
   alias Bank.Storage.Acounts
   alias Bank.Storage.Users
 
+    # Elixir doesn't have primitives like locks or mutexs as synchronization mechanism by desing,
+  # Due to we have to handle that with a more higher abstraction.
+  #
+  # Processes in Elixir is single threaded, I will use an Agent.
+  # https://elixir-lang.org/getting-started/mix-otp/agent.html#the-trouble-with-state
+  # Every request will be served one per time, and rest will be enqueue on the Agent's process queue
+  # with this we create a Critical section and we emulate the ACI of ACID (Atomicity, Consistency, Isolation, Durability)
+  # that are necessary properties of a transacional database.
+  #
+  # They way that a process behavies in Elixir is similar to Active Object pattern
+  # https://en.wikipedia.org/wiki/Active_object
+
+
   def start_link(initial_value) do
     Agent.start_link(fn -> init() end, name: __MODULE__)
   end
