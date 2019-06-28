@@ -20,4 +20,16 @@ defmodule Bank.Storage.AcountsTest do
     assert third == (second + 1)
   end
 
+  test "Query funds by acount" do
+    newAcounts =
+      for _ <- 0..10 do
+        {:acount, acount} = Acounts.new()
+        acount
+      end
+      Enum.each(newAcounts , fn(acount) -> assert {:ok, {:amount, 0}} == Acounts.query_funds_by(acount) end)
+
+      Enum.each(newAcounts , fn(acount) -> Acounts.deposit( acount, acount * acount) end)
+      Enum.each(newAcounts , fn(acount) -> assert {:ok, {:amount, acount * acount}} == Acounts.query_funds_by(acount) end)
+  end
+
 end

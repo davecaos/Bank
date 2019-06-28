@@ -10,7 +10,7 @@ defmodule BankTest do
     {:ok, port: port}
   end
 
-  test "Serves Status", %{port: port} do
+  test "Status health check", %{port: port} do
     assert {:ok, response} = :httpc.request('http://localhost:#{port}/status')
     assert {{_, 200, 'OK'}, _headers, _body} = response
   end
