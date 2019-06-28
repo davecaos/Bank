@@ -43,7 +43,7 @@ defmodule Bank.Storage.Acounts do
 end
 
   def deposit( acount, amount) do
-    {:ok, available_funds} = query_funds_by(acount)
+    {:ok, {:amount, available_funds}} = query_funds_by(acount)
     new_amount = available_funds + amount
     :ets.insert(@bucket, {{:acount, acount}, {:amount, new_amount }})
     {:ok, new_amount}
