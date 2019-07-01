@@ -1,0 +1,26 @@
+
+  test "Status health check", %{port: port} do
+    {:ok,basicAuth =  Base.decode64("dXNlcm5hbWU6cGFzc3dvcmQ=")
+    assert {:ok, response} = :httpc.request('http://localhost:#{port}/status', [{"Authorization","Basic " ++ basicAuth}], [], [])
+    assert {{_, 200, 'OK'}, _headers, _body} = response
+  end
+end
+
+
+:httpc.request(:get, {'http://localhost:1337/status', [{'Authorization',"Basic ZFhObGNtNWhiV1U2Y0dGemMzZHZjbVE9" |> to_charlist }]}, [], [])
+
+
+
+ :httpc.request(:post, {'http://localhost:1337/transactions', [],'application/json', [ }]}, [], [])
+
+
+body = "{\"transaction\": \"deposit\", \"acount\": 1, \"amount\": 10, \"user\": new1  }"|> to_charlist
+ request = {'http://localhost:1337/transactions', [], 'application/json', body}
+12> httpc:request(:post, Request, [], []).
+
+
+
+
+ request = {'http://localhost:1337/transactions', [], 'application/json', body}
+
+ :httpc.request(:post, request, [], [])

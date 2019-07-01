@@ -1,4 +1,4 @@
-defmodule Bank.API.Controller.Balances do
+defmodule Bank.API.Handlers.Balances do
   use Raxx.SimpleServer
   alias Bank.API
   alias Bank.API.Actions.Deposit
@@ -20,12 +20,12 @@ defmodule Bank.API.Controller.Balances do
       {:ok, %{"transaction" => @deposit,"acount" => acount, "amount" => amount}} ->
         data = Deposit.deposit(acount, amount)
         response(:ok)
-        |> API.set_json_payload(%{data: data})
+        |> API.set_json_payload(unwrap(data))
 
         {:ok, %{"transaction" => @withdraw,"acount" => acount, "amount" => amount}} ->
           data = Withdraw.withdraw(acount, amount)
           response(:ok)
-          |> API.set_json_payload(%{data: data})
+          |> API.set_json_payload(unwrap(data))
 
       {:ok, _} ->
         error = %{title: "Missing required data parameter 'name'"}
@@ -41,5 +41,11 @@ defmodule Bank.API.Controller.Balances do
     end
   end
 
+  def unwrap({:ok, data}) do
+    %{data: data}
+  end
 
+  def unwrap({:error, reason}) do
+    %{error: reason}
+  end
 end

@@ -3,12 +3,6 @@ defmodule Bank.API.Actions.Users do
   alias Bank.API
 
   @impl Raxx.SimpleServer
-  def handle_request(_request = %{method: :GET}, _state) do
-    data = %{message: "Hello, Raxx!"}
-
-    response(:ok)
-    |> set_body(Jason.encode!(%{data: data}))
-  end
 
   def handle_request(request = %{method: :POST}, _state) do
     case Jason.decode(request.body) do

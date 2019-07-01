@@ -1,17 +1,16 @@
 defmodule Bank.API.Actions.Deposit do
-  alias Bank.API
   alias Bank.Storage.DB, as: DB
 
   @presition 3
 
-  def deposit(acount, amount) do
+  def execute(acount, amount) do
     case DB.deposit(acount, amount) do
-      {:ok, new_amount} ->
-        message = Float.to_string(new_amount, decimals: @presition)
-        %{message: message}
+      {:ok, funds} ->
+        current_funds = Float.to_string(funds/1, decimals: @presition)
+        {:ok, %{current_funds: current_funds}}
 
       _ ->
-        %{error: "canceled"}
+        {:error, %{reason: "canceled"}}
       end
   end
 
