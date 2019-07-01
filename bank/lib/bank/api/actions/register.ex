@@ -1,4 +1,4 @@
-defmodule Bank.API.Actions.Users do
+defmodule Bank.API.Actions.Register do
   use Raxx.SimpleServer
   alias Bank.API
 

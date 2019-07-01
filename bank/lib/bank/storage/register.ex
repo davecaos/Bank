@@ -1,5 +1,5 @@
-defmodule Bank.Storage.UserLogin do
-  @bucket :user_login
+defmodule Bank.Storage.Register do
+  @bucket :user_register
 
   # The module name represent the main entity to be pesisted and also the primary key.
   # An User "has" only one auth token
@@ -17,7 +17,11 @@ defmodule Bank.Storage.UserLogin do
   end
 
 
-  def valid?(user, token) do
+  def valid_token?(user, token) do
+    {:error, :not_found} != query_token_by(user, token)
+  end
+
+  def valid_password?(user, token) do
     {:error, :not_found} != query_token_by(user, token)
   end
 
@@ -29,6 +33,17 @@ defmodule Bank.Storage.UserLogin do
 
       [{{:users, ^user}, _password, {:token, ^token}, {:time_to_live, _time_to_live}}] ->
         {:ok, {:token, token}}
+    end
+  end
+
+    def match_registration(user, password) do
+    lookup = :ets.lookup(@bucket, user)
+    case lookup do
+      [] ->
+        {:error, :not_found}
+
+      [{{:users, ^user}, {:password, password}, _token, {:time_to_live, _time_to_live}}] ->
+        {:ok, {:password, password}}
     end
   end
 

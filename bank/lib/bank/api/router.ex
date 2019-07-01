@@ -14,8 +14,7 @@ defmodule Bank.API.Router do
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :info)}], [
     {%{path: ["transactions"]}, Handlers.Transactions },
-    {%{path: ["users", "auth"]}, Actions.Users},
-    {%{path: ["users", "singup"]}, Actions.Users},
+    {%{path: ["users", "singup"]}, Actions.Register},
     {%{path: ["status"]}, Handlers.Status},
   ]
 

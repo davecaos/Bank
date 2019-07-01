@@ -19,7 +19,6 @@ defmodule Bank.API do
 
   def start_link(config, server_options) do
     stack = Bank.API.Router.stack(config)
-
     Ace.HTTP.Service.start_link(stack, server_options)
   end
 
