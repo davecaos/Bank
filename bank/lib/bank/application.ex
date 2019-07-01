@@ -1,6 +1,7 @@
 defmodule Bank.Application do
   @moduledoc false
 
+  alias Bank.Storage.DB, as: DB
   use Application
 
   def start(_type, _args) do
@@ -21,6 +22,7 @@ defmodule Bank.Application do
 
     opts = [strategy: :one_for_one, name: Bank.Supervisor]
     Supervisor.start_link(children, opts)
+    DB.start_link([])
   end
 
   defp port() do

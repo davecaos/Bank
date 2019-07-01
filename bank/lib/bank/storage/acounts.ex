@@ -28,7 +28,6 @@ defmodule Bank.Storage.Acounts do
       [{{:acount, ^acount}, {:amount, amount }}] ->
         {:ok, {:amount, amount}}
     end
-
   end
 
   def withdraw( acount, amount) do
@@ -47,13 +46,11 @@ end
     new_amount = available_funds + amount
     :ets.insert(@bucket, {{:acount, acount}, {:amount, new_amount }})
     {:ok, new_amount}
-
   end
 
   def exist?(acount) do
     {:error, :not_found} != query_funds_by(acount)
   end
-
 
   def autoincrement_index() do
     [{:autoincrement_index, current_index}] = :ets.lookup(@bucket, :autoincrement_index)

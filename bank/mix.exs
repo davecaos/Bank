@@ -28,6 +28,7 @@ defmodule Bank.Mixfile do
       {:raxx_logger, "~> 0.2.2"},
       {:jason, "~> 1.0"},
       {:exsync, "~> 0.2.3", only: :dev},
+      {:basic_authentication, "~> 0.2.0"}
     ]
   end
 

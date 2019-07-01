@@ -1,6 +1,7 @@
 defmodule Bank.API.Router do
   use Raxx.Router
   alias Bank.API.Actions
+  alias Bank.API.Handlers
 
   def stack(config) do
     Raxx.Stack.new(
@@ -12,10 +13,10 @@ defmodule Bank.API.Router do
   end
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :info)}], [
-    {%{path: ["transactions"]}, Controller.Transactions },
+    {%{path: ["transactions"]}, Handlers.Transactions },
     {%{path: ["users", "auth"]}, Actions.Users},
     {%{path: ["users", "singup"]}, Actions.Users},
-    {%{path: ["status"]}, Actions.Status},
+    {%{path: ["status"]}, Handlers.Status},
   ]
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :debug)}], [
