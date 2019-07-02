@@ -1,4 +1,4 @@
-defmodule BankBalanceTest do
+defmodule BankBalanceUnitTest do
   use ExUnit.Case, async: true
   doctest Bank
 

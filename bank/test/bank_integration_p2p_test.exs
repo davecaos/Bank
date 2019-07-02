@@ -1,4 +1,4 @@
-defmodule BankTest do
+defmodule BankIntegrationP2P.Test do
   use ExUnit.Case, async: true
   doctest Bank
 

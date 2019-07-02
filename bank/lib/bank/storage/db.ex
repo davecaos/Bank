@@ -66,6 +66,6 @@ defmodule Bank.Storage.DB do
   def init() do
     Users.init()
     Acounts.init()
-    Register.init()
+    Auth.init()
   end
 end
