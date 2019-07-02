@@ -10,7 +10,9 @@ defmodule BankRegisterTest do
   end
 
   test "Status health check", %{port: port} do
-    assert {:ok, response} = :httpc.request('http://localhost:#{port}/singup')
+
+    assert {:ok, response} =
+      :httpc.request(:get, {'http://localhost:1337/status', [{'Authorization',"Basic ZFhObGNtNWhiV1U2Y0dGemMzZHZjbVE9" |> to_charlist }]}, [], [])
     assert {{_, 200, 'OK'}, _headers, _body} = response
   end
 
