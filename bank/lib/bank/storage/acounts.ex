@@ -35,7 +35,7 @@ defmodule Bank.Storage.Acounts do
     if available_funds >= amount  do
       new_amount = available_funds - amount
       :ets.insert(@bucket, {{:acount, acount}, {:amount, new_amount }})
-      {:ok, new_amount}
+      {:ok, {:amount, new_amount}}
     else
       {:error, {:not_enough_funds_for_withdraw, available_funds}}
   end
@@ -45,7 +45,7 @@ end
     {:ok, {:amount, available_funds}} = query_funds_by(acount)
     new_amount = available_funds + amount
     :ets.insert(@bucket, {{:acount, acount}, {:amount, new_amount }})
-    {:ok, new_amount}
+    {:ok, {:amount, new_amount}}
   end
 
   def exist?(acount) do
