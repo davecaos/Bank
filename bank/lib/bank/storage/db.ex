@@ -3,6 +3,7 @@ defmodule Bank.Storage.DB do
 
   alias Bank.Storage.Acounts
   alias Bank.Storage.Users
+  alias Bank.Storage.Auth
 
   # Elixir doesn't have primitives like locks or mutexs as synchronization mechanism by desing,
   # Due to we have to handle that with a more higher abstraction.
@@ -54,6 +55,9 @@ defmodule Bank.Storage.DB do
     critical_section(fn _ ->  Acounts.query_funds_by(acount) end)
   end
 
+  def signup(user, password) do
+    critical_section(fn _ ->  Auth.new(user, password) end)
+  end
 
   defp critical_section(lambda) do
     Agent.get(__MODULE__, lambda)
@@ -62,5 +66,6 @@ defmodule Bank.Storage.DB do
   def init() do
     Users.init()
     Acounts.init()
+    Register.init()
   end
 end

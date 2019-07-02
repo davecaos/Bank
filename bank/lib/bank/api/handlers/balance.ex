@@ -6,13 +6,9 @@ defmodule Bank.API.Handlers.Balances do
 
   @impl Raxx.SimpleServer
   def handle_request(request = %{method: :POST}, _state) do
-    IO.puts("request.body >>>>>#{inspect(request.body)}")
-    IO.puts("request.body >>>>>#{inspect(Jason.decode(request.body))}")
     case Jason.decode(request.body) do
       {:ok, %{ "acount" => acount}} ->
-        IO.puts("acount >>>>> #{inspect(acount)}")
         data = Balance.execute(acount)
-        IO.puts("data >>>>> #{inspect(data)}")
         response(:ok)
         |> API.set_json_payload(Option.maybe(data))
 
@@ -22,10 +18,8 @@ defmodule Bank.API.Handlers.Balances do
         response(:bad_request)
         |> API.set_json_payload(%{errors: [error]})
 
-      {:error, eeee} ->
-        IO.puts("eeee>>>>>#{inspect(Jason.decode(eeee))}")
+      {:error, _} ->
         error = %{title: "Could not decode request data"}
-
         response(:unsupported_media_type)
         |> API.set_json_payload(%{errors: [error]})
     end
