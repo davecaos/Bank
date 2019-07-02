@@ -1,4 +1,4 @@
-defmodule BankStatusTest do
+defmodule BankRegisterTest do
   use ExUnit.Case, async: true
   doctest Bank
 
@@ -10,7 +10,9 @@ defmodule BankStatusTest do
   end
 
   test "Status health check", %{port: port} do
-    assert {:ok, response} = :httpc.request('http://localhost:#{port}/status')
+
+    assert {:ok, response} =
+      :httpc.request(:get, {'http://localhost:1337/status', [{'Authorization',"Basic ZFhObGNtNWhiV1U2Y0dGemMzZHZjbVE9" |> to_charlist }]}, [], [])
     assert {{_, 200, 'OK'}, _headers, _body} = response
   end
 
