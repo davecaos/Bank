@@ -4,22 +4,23 @@ defmodule Bank.API.Actions.Auth do
   import Raxx.BasicAuthentication
 
   @impl Raxx.SimpleServer
-  def handle_request(request = %{method: :POST}, _state) do
+  def handle_request(request = %{method: :GET}, _state) do
          caca = fetch_basic_authentication(request)
        IO.puts("my fetch_basic_authentication() is: #{inspect(caca)}")
 
     case fetch_basic_authentication(request) do
       {:ok, {user, password}} ->
+        data = %{error: "Wrong data encoding"}
         case DB.match_registration(user, password) do
           true ->
             token = token(user)
             data = %{token: token}
           false ->
+            data = %{error: "Wrong user or password input"}
         end
 
-
         response(:ok)
-        |> API.set_json_payload(%{data: data})
+        |> API.set_json_payload(data)
 
       {:error, _} ->
         error = %{title: "Malformed Request"}

@@ -1,4 +1,4 @@
-defmodule Bank.Storage.AcountsTest do
+defmodule Bank.Storage.Acounts.UnitTest do
   use ExUnit.Case
   doctest Bank
 
