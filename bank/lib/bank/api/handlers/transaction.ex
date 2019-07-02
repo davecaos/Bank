@@ -12,8 +12,8 @@ defmodule Bank.API.Handlers.Transactions do
 
 
   def handle_request(request = %{method: :POST}, _state) do
-    IO.puts("#{inspect(request.body)}")
     case Jason.decode(request.body) do
+
       {:ok, %{"transaction" => @deposit,"acount" => acount, "amount" => amount ,"user" => _user}} ->
         data = Deposit.execute(acount, amount)
         response(:ok)

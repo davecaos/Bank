@@ -11,12 +11,10 @@ defmodule Bank.Storage.Users do
   def new(user) do
     acounts = []
     new_user = {{:user, user},{:acounts, acounts}}
-    c = case :ets.insert_new(@bucket, new_user) do
+    case :ets.insert_new(@bucket, new_user) do
       true  -> new_user
       false -> {:error, :already_exists}
     end
-    IO.puts(" new(user) #{inspect(c)}")
-    c
   end
 
   def add_acount_to(user, new_acount) do
@@ -30,9 +28,7 @@ defmodule Bank.Storage.Users do
   end
 
   def query_acounts_by(user) do
-    IO.puts("query_acounts_by #{inspect(user)}")
     lookup = :ets.lookup(@bucket, {:user, user})
-    IO.puts("lookup #{inspect(lookup)}")
     case lookup do
       [] ->
         {:error, :not_found}

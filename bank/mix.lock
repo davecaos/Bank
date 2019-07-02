@@ -1,10 +1,13 @@
 %{
   "ace": {:hex, :ace, "0.18.8", "9853110247f769e7d1600be7cd2abd638b53391c8c7b1ab11baad15184cb95d4", [:mix], [{:hpack, "~> 0.2.3", [hex: :hpack_erl, repo: "hexpm", optional: false]}, {:raxx, "~> 0.17.0 or ~> 0.18.0 or ~> 1.0", [hex: :raxx, repo: "hexpm", optional: false]}], "hexpm"},
+  "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], [], "hexpm"},
   "basic_authentication": {:hex, :basic_authentication, "0.2.0", "30414778bbf69d6a68b8da9d6b6ce3b473c41744ed82e10cf8a58793b8dff377", [:mix], [{:raxx, "~> 1.0", [hex: :raxx, repo: "hexpm", optional: false]}], "hexpm"},
   "exsync": {:hex, :exsync, "0.2.3", "a1ac11b4bd3808706003dbe587902101fcc1387d9fc55e8b10972f13a563dd15", [:mix], [{:file_system, "~> 0.2", [hex: :file_system, repo: "hexpm", optional: false]}], "hexpm"},
   "file_system": {:hex, :file_system, "0.2.7", "e6f7f155970975789f26e77b8b8d8ab084c59844d8ecfaf58cbda31c494d14aa", [:mix], [], "hexpm"},
   "hpack": {:hex, :hpack_erl, "0.2.3", "17670f83ff984ae6cd74b1c456edde906d27ff013740ee4d9efaa4f1bf999633", [:rebar3], [], "hexpm"},
   "jason": {:hex, :jason, "1.1.2", "b03dedea67a99223a2eaf9f1264ce37154564de899fd3d8b9a21b1a6fd64afe7", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm"},
+  "joken": {:hex, :joken, "2.1.0", "bf21a73105d82649f617c5e59a7f8919aa47013d2519ebcc39d998d8d12adda9", [:mix], [{:jose, "~> 1.9", [hex: :jose, repo: "hexpm", optional: false]}], "hexpm"},
+  "jose": {:hex, :jose, "1.9.0", "4167c5f6d06ffaebffd15cdb8da61a108445ef5e85ab8f5a7ad926fdf3ada154", [:mix, :rebar3], [{:base64url, "~> 0.0.1", [hex: :base64url, repo: "hexpm", optional: false]}], "hexpm"},
   "raxx": {:hex, :raxx, "1.0.1", "8c51ec5227c85f999360fc844fc1d4e2e5a2adf2b0ce068eb56243ee6b2f65e3", [:mix], [], "hexpm"},
   "raxx_logger": {:hex, :raxx_logger, "0.2.2", "51bbce9371298e7329de028fe13cf050bf59547bc8f1926910d479ba4b31c4b4", [:mix], [{:raxx, "~> 0.17.5 or ~> 0.18.0 or ~> 1.0", [hex: :raxx, repo: "hexpm", optional: false]}], "hexpm"},
 }

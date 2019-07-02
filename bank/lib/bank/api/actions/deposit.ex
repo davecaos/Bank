@@ -5,7 +5,7 @@ defmodule Bank.API.Actions.Deposit do
 
   def execute(acount, amount) do
     case DB.deposit(acount, amount) do
-      {:ok, funds} ->
+      {:ok, {:amount, funds}} ->
         current_funds = Float.to_string(funds/1, decimals: @presition)
         {:ok, %{current_funds: current_funds}}
 

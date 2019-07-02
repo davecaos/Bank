@@ -1,51 +1,34 @@
 defmodule Bank.API.Handlers.Balances do
   use Raxx.SimpleServer
   alias Bank.API
-  alias Bank.API.Actions.Deposit
-  alias Bank.API.Actions.Withdraw
-
-  @deposit "deposit"
-  @withdraw "withdraw"
+  alias Bank.API.Actions.Balance
+  alias Bank.Utils.Option , as: Option
 
   @impl Raxx.SimpleServer
-  def handle_request(_request = %{method: :POST}, _state) do
-    data = %{message: "Hello, Raxx!"}
-
-    response(:ok)
-    |> set_body(Jason.encode!(%{data: data}))
-  end
-
   def handle_request(request = %{method: :POST}, _state) do
+    IO.puts("request.body >>>>>#{inspect(request.body)}")
+    IO.puts("request.body >>>>>#{inspect(Jason.decode(request.body))}")
     case Jason.decode(request.body) do
-      {:ok, %{"transaction" => @deposit,"acount" => acount, "amount" => amount}} ->
-        data = Deposit.deposit(acount, amount)
+      {:ok, %{ "acount" => acount}} ->
+        IO.puts("acount >>>>> #{inspect(acount)}")
+        data = Balance.execute(acount)
+        IO.puts("data >>>>> #{inspect(data)}")
         response(:ok)
-        |> API.set_json_payload(unwrap(data))
-
-        {:ok, %{"transaction" => @withdraw,"acount" => acount, "amount" => amount}} ->
-          data = Withdraw.withdraw(acount, amount)
-          response(:ok)
-          |> API.set_json_payload(unwrap(data))
+        |> API.set_json_payload(Option.maybe(data))
 
       {:ok, _} ->
-        error = %{title: "Missing required data parameter 'name'"}
+        error = %{title: "Missing required data parameter 'acount'"}
 
         response(:bad_request)
         |> API.set_json_payload(%{errors: [error]})
 
-      {:error, _} ->
+      {:error, eeee} ->
+        IO.puts("eeee>>>>>#{inspect(Jason.decode(eeee))}")
         error = %{title: "Could not decode request data"}
 
         response(:unsupported_media_type)
         |> API.set_json_payload(%{errors: [error]})
     end
   end
-
-  def unwrap({:ok, data}) do
-    %{data: data}
-  end
-
-  def unwrap({:error, reason}) do
-    %{error: reason}
-  end
 end
+
