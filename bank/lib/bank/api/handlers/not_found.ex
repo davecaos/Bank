@@ -1,4 +1,4 @@
-defmodule Bank.API.Actions.NotFound do
+defmodule Bank.API.Handlers.NotFound do
   use Raxx.SimpleServer
   alias Bank.API
 

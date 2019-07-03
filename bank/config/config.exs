@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :joken,
-  myrsasigner: [
+  rsa_signer: [
     signer_alg: "RS256",
     key_pem: """
     -----BEGIN RSA PRIVATE KEY-----

@@ -1,4 +1,4 @@
-defmodule Bank.API.Actions.Signup do
+defmodule Bank.API.Handlers.Signup do
   use Raxx.SimpleServer
   import Raxx.BasicAuthentication
 
