@@ -14,11 +14,11 @@ defmodule Bank.Utils.Endpoints do
   end
 
   def signup(port, auth_header, jsonBody) do
-    post('http://localhost:#{port}/signup', auth_header,jsonBody)
+    post('http://localhost:#{port}/signup', auth_header, jsonBody)
   end
 
-  def auth(port, jsonBody) do
-    post('http://localhost:#{port}/auth', jsonBody)
+  def auth(port, auth_header, jsonBody) do
+    post('http://localhost:#{port}/auth', auth_header, jsonBody)
   end
   
 
