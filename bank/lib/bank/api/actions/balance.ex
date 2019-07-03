@@ -11,7 +11,7 @@ defmodule Bank.API.Actions.Balance do
           {:ok, %{current_funds: current_funds}}
 
         _ ->
-          {:error, %{reason: "canceled"}}
+          {:error, %{reason: "Canceled Operation"}}
         end
     rescue
       _error in RuntimeError -> {:error, %{reason: "Internal error"}}

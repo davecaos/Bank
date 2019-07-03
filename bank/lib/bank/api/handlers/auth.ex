@@ -22,10 +22,4 @@ defmodule Bank.API.Handlers.Auth do
 
     end
   end
-
-  def token(user) do
-    signer = Joken.Signer.parse_config(:myrsasigner)
-    token = Joken.generate_and_sign!(%{}, %{"user" => user}, signer)
-    token
-  end
 end
