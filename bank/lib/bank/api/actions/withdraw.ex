@@ -4,13 +4,18 @@ defmodule Bank.API.Actions.Withdraw do
   @presition 3
 
   def execute(acount, amount) do
-    case DB.withdraw(acount, amount) do
-      {:ok, new_amount} ->
-        current_funds = Float.to_string(new_amount, decimals: @presition)
-        {:ok, %{current_funds: current_funds}}
+    try do
+      case DB.withdraw(acount, amount) do
+        {:ok, new_amount} ->
+          current_funds = Float.to_string(new_amount, decimals: @presition)
+          {:ok, %{current_funds: current_funds}}
 
-      _ ->
-        {:error, %{reason: "canceled"}}
-      end
+        _ ->
+          {:error, %{reason: "canceled"}}
+        end
+    rescue
+      _error in RuntimeError -> {:error, %{reason: "Internal error"}}
+    end
   end
 end
+

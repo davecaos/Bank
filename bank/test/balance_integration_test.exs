@@ -1,4 +1,4 @@
-defmodule BankBalanceIntegrationP2P.Test do
+defmodule BankBalanceIntegration.Test do
   use ExUnit.Case, async: true
   doctest Bank
 
@@ -33,8 +33,8 @@ defmodule BankBalanceIntegrationP2P.Test do
 
 
     jsonBody = build_json_body2( %{"acount" => new_acount, "amount" => 10 ,"user" => new_user})
-    assert {:ok, response2} = :httpc.request(:post, {'http://localhost:#{port}/transactions', [],'application/json',jsonBody},[], [])
-    assert {{_, 200, 'OK'}, _headers, body} = response2
+    assert {:ok, response} = :httpc.request(:post, {'http://localhost:#{port}/transactions', [],'application/json',jsonBody},[], [])
+    assert {{_, 200, 'OK'}, _headers, body} = response
     assert  body == '{"data":{"current_funds":"10.000"}}'
   end
 

@@ -59,6 +59,10 @@ defmodule Bank.Storage.DB do
     critical_section(fn _ ->  Auth.new(user, password) end)
   end
 
+  def match_registration(user, password) do
+    critical_section(fn _ ->  Auth.match_registration(user, password) end)
+  end
+
   defp critical_section(lambda) do
     Agent.get(__MODULE__, lambda)
   end

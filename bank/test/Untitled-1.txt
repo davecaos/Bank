@@ -24,3 +24,8 @@ body = "{\"transaction\": \"deposit\", \"acount\": 1, \"amount\": 10, \"user\": 
  request = {'http://localhost:1337/transactions', [], 'application/json', body}
 
  :httpc.request(:post, request, [], [])
+
+
+
+
+ IO.puts("my fetch_basic_authentication() is: #{inspect(caca)}")

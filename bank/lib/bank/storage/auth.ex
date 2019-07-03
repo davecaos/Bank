@@ -15,7 +15,7 @@ defmodule Bank.Storage.Auth do
 
 
   def match_registration(user, password) do
-    lookup = :ets.lookup(@bucket, user)
+    lookup = :ets.lookup(@bucket, {:users, user})
     case lookup do
       [] ->
         false

@@ -1,39 +1,24 @@
 defmodule Bank.API.Actions.Auth do
-  use Raxx.SimpleServer
-  alias Bank.API
-  import Raxx.BasicAuthentication
+  alias Bank.Storage.DB, as: DB
 
-  @impl Raxx.SimpleServer
-  def handle_request(request = %{method: :GET}, _state) do
-         caca = fetch_basic_authentication(request)
-       IO.puts("my fetch_basic_authentication() is: #{inspect(caca)}")
-
-    case fetch_basic_authentication(request) do
-      {:ok, {user, password}} ->
-        data = %{error: "Wrong data encoding"}
+  def create_token(user, password) do
+    try do
         case DB.match_registration(user, password) do
           true ->
-            token = token(user)
-            data = %{token: token}
+            token = jwt_token(user)
+            {:ok, %{token: token}}
           false ->
-            data = %{error: "Wrong user or password input"}
-        end
-
-        response(:ok)
-        |> API.set_json_payload(data)
-
-      {:error, _} ->
-        error = %{title: "Malformed Request"}
-
-        response(:bad_request)
-        |> API.set_json_payload(%{errors: [error]})
-
-    end
+            {:error, %{reason: "Wrong user or password input"}}
+          end
+      rescue
+        _error in RuntimeError -> {:error, %{reason: "Internal error"}}
+      end
   end
 
-  def token(user) do
-    signer = Joken.Signer.parse_config(:myrsasigner)
+  defp jwt_token(user) do
+    signer = Joken.Signer.parse_config(:rsa_signer)
     token = Joken.generate_and_sign!(%{}, %{"user" => user}, signer)
     token
   end
+
 end

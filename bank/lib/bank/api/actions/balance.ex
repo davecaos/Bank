@@ -4,15 +4,18 @@ defmodule Bank.API.Actions.Balance do
   @presition 3
 
   def execute(acount) do
-    case DB.balance(acount) do
-      {:ok, {:amount, amount}} ->
-        current_funds = Float.to_string(amount/1, decimals: @presition)
-        {:ok, %{current_funds: current_funds}}
+    try do
+      case DB.balance(acount) do
+        {:ok, {:amount, amount}} ->
+          current_funds = Float.to_string(amount/1, decimals: @presition)
+          {:ok, %{current_funds: current_funds}}
 
-      _ ->
-        {:error, %{reason: "canceled"}}
-      end
+        _ ->
+          {:error, %{reason: "canceled"}}
+        end
+    rescue
+      _error in RuntimeError -> {:error, %{reason: "Internal error"}}
+    end
   end
-
 end
 

@@ -1,9 +1,9 @@
-defmodule BankAuthIntegrationTest do
+defmodule BankAuthIntegration.Test do
   use ExUnit.Case, async: true
   doctest Bank
   alias Bank.Utils.Generator
 
-  @times 100
+  @times 1
 
   setup %{} do
     # OS will assign a free port when service is started with port 0.
@@ -12,15 +12,28 @@ defmodule BankAuthIntegrationTest do
     {:ok, port: port}
   end
 
-  test "Basic Auth to Joken JWT generation", %{port: port} do
-    Enum.each 0..@times, fn _ ->  Generator.random |> check_joken_jwt_generation(port) end
+  test "Joken JWT generation", %{port: port} do
+    newUsers =  for _ <- 0..10 , do: Generator.random
+    Enum.each(newUsers, fn newUser->  newUser |> pre_signup_users(port) end)
+    Enum.each(newUsers, fn newUser->  newUser |>  check_joken_jwt_generation_with_auth(port) end)
   end
 
-  defp check_joken_jwt_generation(user, port) do
-    {:ok, authorization} = BasicAuthentication.encode_authentication(user, "open sesame")
+  defp pre_signup_users(user, port) do
+    endPoint = 'http://localhost:#{port}/signup'
+    check_joken_jwt_generation(user, endPoint, port)
+  end
+
+  defp check_joken_jwt_generation_with_auth(user, port) do
+    endPoint = 'http://localhost:#{port}/auth'
+    check_joken_jwt_generation(user, endPoint, port)
+  end
+
+  defp check_joken_jwt_generation(user, endPoint, port) do
+    password = String.reverse(user)
+    {:ok, authorization} = BasicAuthentication.encode_authentication(user, password)
     auth_header = [{'authorization', authorization |> to_charlist }]
     jsonBody = []
-    request = {'http://localhost:#{port}/signup', auth_header, 'application/json', jsonBody}
+    request = {endPoint, auth_header, 'application/json', jsonBody}
 
     assert {:ok, response} = :httpc.request(:post, request, [], [])
     assert {{_, 200, 'OK'}, _headers, body} = response

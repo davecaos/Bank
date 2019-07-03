@@ -20,7 +20,8 @@ defmodule Bank.Storage.Users do
   def add_acount_to(user, new_acount) do
     acounts = query_acounts_by(user)
     updated_acounts = [new_acount | acounts]
-    :ets.update_element(@bucket, user, {1, updated_acounts})
+    :ets.update_element(@bucket, user, {2, updated_acounts})
+    {:ok, {:acounts, acounts}}
   end
 
   def exist?(user) do

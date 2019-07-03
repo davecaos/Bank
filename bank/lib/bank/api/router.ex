@@ -21,6 +21,6 @@ defmodule Bank.API.Router do
   ]
 
   section [{Raxx.Logger, Raxx.Logger.setup(level: :debug)}], [
-    {_, Actions.NotFound}
+    {_, Handlers.NotFound}
   ]
 end
