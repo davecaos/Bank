@@ -5,20 +5,20 @@ defmodule BankBalanceIntegration.Test do
   alias Bank.Storage.Users
   alias Bank.Storage.Acounts
   alias Bank.Utils.Generator
+  alias Bank.Utils.Endpoints, as: Endpoints
 
   setup %{} do
     # OS will assign a free port when service is started with port 0.
     {:ok, service} = Bank.API.start_link(port: 0, cleartext: true)
     {:ok, port} = Ace.HTTP.Service.port(service)
-    endPoint = 'http://localhost:#{port}/balances'
-    {:ok, port: port, endPoint: endPoint}
+    {:ok, port: port}
   end
 
   def post(endPoint, jsonBody) do
     :httpc.request(:post, {endPoint, [],'application/json',jsonBody},[], [])
   end
 
-  test "Do a deposit to a brand new user", %{port: port, endPoint: endPoint} do
+  test "Do a deposit to a brand new user", %{port: port} do
     new_user = Generator.random()
     Users.new(new_user)
 
@@ -26,7 +26,7 @@ defmodule BankBalanceIntegration.Test do
     Users.add_acount_to(new_user, new_acount)
 
     jsonBody = build_json_body( %{"acount" => new_acount})
-    assert {:ok, response} = :httpc.request(:post, {'http://localhost:#{port}/balances', [],'application/json',jsonBody},[], [])
+    assert {:ok, response} = Endpoints.balances(port, jsonBody)
     assert {{_, 200, 'OK'}, _headers, body} = response
     assert {:ok, {:amount, 0}} == Acounts.query_funds_by(new_acount)
 
@@ -38,7 +38,7 @@ defmodule BankBalanceIntegration.Test do
     assert  body == '{"data":{"current_funds":"10.000"}}'
   end
 
-  test "Do a withdraw to a brand new user", %{port: port, endPoint: endPoint} do
+  test "Do a withdraw to a brand new user", %{port: port} do
     new_user = Generator.random()
     Users.new(new_user)
 
