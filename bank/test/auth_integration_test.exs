@@ -3,7 +3,7 @@ defmodule BankAuthIntegration.Test do
   doctest Bank
   alias Bank.Utils.Generator
 
-  @times 1
+  @times 10
 
   setup %{} do
     # OS will assign a free port when service is started with port 0.
@@ -13,7 +13,7 @@ defmodule BankAuthIntegration.Test do
   end
 
   test "Joken JWT generation", %{port: port} do
-    newUsers =  for _ <- 0..10 , do: Generator.random
+    newUsers =  for _ <- 0..@times , do: Generator.random
     Enum.each(newUsers, fn newUser->  newUser |> pre_signup_users(port) end)
     Enum.each(newUsers, fn newUser->  newUser |>  check_joken_jwt_generation_with_auth(port) end)
   end

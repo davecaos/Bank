@@ -12,7 +12,6 @@ defmodule Bank.API.Handlers.Signup do
     case fetch_basic_authentication(request) do
       {:ok, {user, password}} ->
         data = Signup.execute(user, password)
-
         response(:ok)
         |> API.set_json_payload(Option.maybe(data))
 

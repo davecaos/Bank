@@ -18,7 +18,7 @@ defmodule Bank.Storage.Users do
   end
 
   def add_acount_to(user, new_acount) do
-    acounts = query_acounts_by(user)
+    {:ok, {:acounts, acounts}} = query_acounts_by(user)
     updated_acounts = [new_acount | acounts]
     :ets.update_element(@bucket, user, {2, updated_acounts})
     {:ok, {:acounts, acounts}}
