@@ -13,12 +13,17 @@ defmodule BankAuthIntegration.Test do
     {:ok, port: port}
   end
 
+  test "Joken JWT generation with /signup", %{port: port} do
+    newUsers =  for _ <- 0..@times , do: Generator.random
+    Enum.each(newUsers, fn newUser->  newUser |> check_joken_jwt_generation_with_signup(port) end)
+  end
+
   test "Joken JWT generation with /signup & /auth", %{port: port} do
     newUsers =  for _ <- 0..@times , do: Generator.random
     Enum.each(newUsers, fn newUser->  newUser |> check_joken_jwt_generation_with_signup(port) end)
-    Enum.each(newUsers, fn newUser->  newUser |>  check_joken_jwt_generation_with_auth(port) end)
+    #Any user must be registered with /signup before user /auth
+    Enum.each(newUsers, fn newUser->  newUser |> check_joken_jwt_generation_with_auth(port) end)
   end
-
 
   defp check_joken_jwt_generation_with_signup(user, port) do
     postToSignup = &Endpoints.signup/3
@@ -35,11 +40,11 @@ defmodule BankAuthIntegration.Test do
     {:ok, authorization} = BasicAuthentication.encode_authentication(user, password)
     auth_header = [{'authorization', authorization |> to_charlist }]
     jsonBody = []
-
+    signer = Joken.Signer.parse_config(:rsa_signer)
+    # Checks! ...
     assert {:ok, response} = postCallBack.(port, auth_header, jsonBody)
     assert {{_, 200, 'OK'}, _headers, body} = response
     assert {:ok, %{"data" => %{ "token" => token}}} = Jason.decode( body)
-    signer = Joken.Signer.parse_config(:rsa_signer)
     assert {:ok, %{"user" => ^user}} = Joken.verify_and_validate(%{}, token, signer)
   end
 end
